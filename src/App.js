@@ -1,10 +1,10 @@
 import "./App.css";
-import List from "./components/List";
+import IncidentsListContainer from "./components/IncidentsList/IncidentsListContainer";
 
 function App() {
   return (
     <div className="App">
-      <List />
+      <IncidentsListContainer />
     </div>
   );
 }
