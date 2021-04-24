@@ -6,6 +6,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Pagination from "@material-ui/lab/Pagination";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,11 +16,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const IncidentsList = ({ incidents, page, setPage, total }) => {
+const IncidentsList = ({
+  incidents,
+  page,
+  setPage,
+  total,
+  selected,
+}) => {
   const classes = useStyles();
-
+  const history = useHistory();
+  
   const handleChange = (event, value) => {
     setPage(value);
+  };
+
+  const handleClick = (id) => {
+    history.push(`/incident/${id}`);
   };
 
   const count = Math.ceil(total / 10);
@@ -31,10 +43,14 @@ const IncidentsList = ({ incidents, page, setPage, total }) => {
       </Typography>
       <List dense className={classes.root}>
         {incidents.map((incident) => {
-          const { id, title, occurred_at } = incident;
+          const { id, title, updated_at } = incident;
           return (
-            <ListItem key={id} button>
-              <ListItemText id={id} primary={`${title}`} secondary={moment.unix(occurred_at).format('DD/MM/yyyy hh:mm')} />
+            <ListItem key={id} selected={id === selected} button onClick={() => handleClick(id)}>
+              <ListItemText
+                id={id}
+                primary={`${title}`}
+                secondary={moment.unix(updated_at).format("DD/MM/yyyy hh:mm")}
+              />
             </ListItem>
           );
         })}

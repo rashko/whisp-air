@@ -6,9 +6,18 @@ import {
   INCIDENTS_FETCH_FAILED,
 } from "../store/types";
 
+const mapGeometry = (data) => {
+  const hash = {};
+  data.forEach((item) => {
+    hash[item.properties.id] = {
+      coordinates: item.geometry.coordinates,
+    };
+  });
+  return hash;
+};
 function* fetchIncidents(action) {
   try {
-    const [incidents, total] = yield all([
+    const [incidents, geometry] = yield all([
       call(getIncidents, {
         page: action.page,
         per_page: action.per_page,
@@ -18,7 +27,12 @@ function* fetchIncidents(action) {
         occurred_after: action.occurredAfter,
       }),
     ]);
-    yield put({ type: INCIDENTS_FETCH_SUCCEEDED, incidents, total: total.length });
+    yield put({
+      type: INCIDENTS_FETCH_SUCCEEDED,
+      incidents,
+      geometry: mapGeometry(geometry),
+      total: geometry.length,
+    });
   } catch (e) {
     yield put({ type: INCIDENTS_FETCH_FAILED, message: e.message });
   }

@@ -7,8 +7,7 @@ const BASE = "https://bikewise.org/api";
 const VERSION = "v2";
 const AREA = "berlin";
 
-export const getIncidents = ({page = 1, per_page = 10, occurred_after}) => {
-
+export const getIncidents = ({ page = 1, per_page = 10, occurred_after }) => {
   return axios
     .get(
       `${BASE}/${VERSION}/incidents?page=${page}&per_page=${per_page}&occurred_after=${occurred_after}&proximity=${locations[AREA]}&incident_type=theft`
@@ -16,10 +15,16 @@ export const getIncidents = ({page = 1, per_page = 10, occurred_after}) => {
     .then((response) => response.data.incidents);
 };
 
-export const getIncidentsTotal = ({occurred_after}) => {
+export const getIncidentsTotal = ({ occurred_after }) => {
   return axios
     .get(
       `${BASE}/${VERSION}/locations?occurred_after=${occurred_after}&proximity_square=100&proximity=${locations[AREA]}&all=true`
     )
     .then((response) => response.data.features);
+};
+
+export const getIncident = ({ id }) => {
+  return axios
+    .get(`${BASE}/${VERSION}/incident?id=${id}`)
+    .then((response) => response.data.incidents);
 };

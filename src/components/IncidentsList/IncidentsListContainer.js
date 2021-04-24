@@ -9,6 +9,7 @@ const IncidentsListContainer = () => {
   const dispatch = useDispatch();
   const incidents = useSelector((state) => state.incidents.incidents);
   const total = useSelector((state) => state.incidents.total);
+  const selected = useSelector((state) => state.incidents.selectedIncident);
   const occurredAfter = moment().subtract(1, "year").startOf("day").unix();
   useEffect(
     () => dispatch({ type: INCIDENTS_FETCH_REQUESTED, page, occurredAfter }),
@@ -17,7 +18,13 @@ const IncidentsListContainer = () => {
 
   return (
     <div>
-      <IncidentsList incidents={incidents} page={page} setPage={setPage} total={total} />
+      <IncidentsList
+        incidents={incidents}
+        page={page}
+        setPage={setPage}
+        total={total}
+        selected={selected?.id}
+      />
     </div>
   );
 };

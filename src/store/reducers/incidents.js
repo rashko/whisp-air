@@ -1,7 +1,9 @@
-import { INCIDENTS_FETCH_SUCCEEDED } from "../types";
+import { INCIDENTS_FETCH_SUCCEEDED, SET_SELECTED_INCIDENT } from "../types";
 const initialState = {
   incidents: [],
-  total: 0
+  total: 0,
+  geometry: {},
+  selectedIncident: {},
 };
 
 export default function appReducer(state = initialState, action) {
@@ -10,7 +12,13 @@ export default function appReducer(state = initialState, action) {
       return {
         ...state,
         incidents: action.incidents,
-        total: action.total
+        geometry: action.geometry,
+        total: action.total,
+      };
+    case SET_SELECTED_INCIDENT:
+      return {
+        ...state,
+        selectedIncident: state.incidents.find(i => i.id === action.id),
       };
     default:
       return state;
