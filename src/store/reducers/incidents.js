@@ -2,6 +2,7 @@ import {
   INCIDENTS_FETCH_REQUESTED,
   INCIDENTS_FETCH_SUCCEEDED,
   INCIDENT_FETCH_SUCCEEDED,
+  INCIDENTS_FETCH_FAILED,
   SET_SEARCH_PARAMS,
 } from "../types";
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   query: "",
   date: "",
   isFetching: false,
+  errorFetching: false,
 };
 
 export default function appReducer(state = initialState, action) {
@@ -19,7 +21,10 @@ export default function appReducer(state = initialState, action) {
     case INCIDENTS_FETCH_REQUESTED:
       return {
         ...state,
+        incidents: [],
+        total: 0,
         isFetching: true,
+        errorFetching: false,
       };
     case INCIDENTS_FETCH_SUCCEEDED:
       return {
@@ -27,6 +32,12 @@ export default function appReducer(state = initialState, action) {
         incidents: action.incidents,
         geometry: action.geometry,
         total: action.total,
+        isFetching: false,
+      };
+    case INCIDENTS_FETCH_FAILED:
+      return {
+        ...state,
+        errorFetching: true,
         isFetching: false,
       };
     case INCIDENT_FETCH_SUCCEEDED:

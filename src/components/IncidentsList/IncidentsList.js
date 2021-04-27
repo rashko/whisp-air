@@ -6,6 +6,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Pagination from "@material-ui/lab/Pagination";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Divider from "@material-ui/core/Divider";
+import Avatar from "@material-ui/core/Avatar";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { useHistory } from "react-router-dom";
 import { formatDate } from "../../utils";
 
@@ -14,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+  },
+  large: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
   },
 }));
 
@@ -37,19 +45,46 @@ const IncidentsList = ({ incidents, page, setPage, total, isFetching }) => {
       {!isFetching && (
         <>
           <Typography variant="h6" gutterBottom>
-            Total incidents: {total}
+            {total > 0 ? `Total incidents: ${total}` : "No results found"}
           </Typography>
           <List dense className={classes.root}>
-            {incidents.map((incident) => {
-              const { id, title, occurred_at } = incident;
+            {incidents.map((incident, index) => {
+              const {
+                id,
+                title,
+                occurred_at,
+                media: { image_url_thumb },
+              } = incident;
               return (
-                <ListItem key={id} button onClick={() => handleClick(id)}>
-                  <ListItemText
-                    id={id}
-                    primary={`${title}`}
-                    secondary={formatDate(occurred_at)}
-                  />
-                </ListItem>
+                <>
+                  <ListItem key={id} button onClick={() => handleClick(id)}>
+                    <ListItemText
+                      id={id}
+                      primary={`${title}`}
+                      secondary={formatDate(occurred_at)}
+                    />
+                    <ListItemAvatar>
+                      {image_url_thumb && (
+                        <Avatar
+                          alt={title}
+                          src={image_url_thumb}
+                          className={classes.large}
+                          variant="rounded"
+                        />
+                      )}
+                      {!image_url_thumb && (
+                        <Avatar
+                          alt={title}
+                          className={classes.large}
+                          variant="rounded"
+                        >
+                          <DirectionsBikeIcon style={{ fontSize: 50 }} />
+                        </Avatar>
+                      )}
+                    </ListItemAvatar>
+                  </ListItem>
+                  {index < 9 && <Divider variant="inset" component="li" />}
+                </>
               );
             })}
             {count > 0 && (

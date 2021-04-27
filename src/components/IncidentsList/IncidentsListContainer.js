@@ -5,21 +5,27 @@ import {
   SET_SEARCH_PARAMS,
 } from "../../store/types";
 import IncidentsList from "./IncidentsList";
-import IncidentsFilter from "./incidentsFilter";
-import moment from "moment";
+import IncidentsFilter from "./IncidentsFilter";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "../Alert/Alert";
+import { occurredDate } from "../../utils";
+import Typography from "@material-ui/core/Typography";
 
 const IncidentsListContainer = () => {
   const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const incidents = useSelector((state) => state.incidents.incidents);
   const total = useSelector((state) => state.incidents.total);
   const query = useSelector((state) => state.incidents.query);
   const date = useSelector((state) => state.incidents.date);
   const isFetching = useSelector((state) => state.incidents.isFetching);
+  const errorFetching = useSelector((state) => state.incidents.errorFetching);
 
   useEffect(() => {
-    const occurred_before = !!date && moment.utc(date).endOf("day").format('X');
-    const occurred_after = !!date && moment.utc(date).startOf("day").format('X');
+    const occurred_before = occurredDate({ date, beforeOrAfter: true });
+    const occurred_after = occurredDate({ date, beforeOrAfter: false });
+
     return dispatch({
       type: INCIDENTS_FETCH_REQUESTED,
       page,
@@ -29,12 +35,28 @@ const IncidentsListContainer = () => {
     });
   }, [dispatch, page, query, date]);
 
+  useEffect(() => {
+    if (errorFetching) {
+      setOpen(true);
+    }
+  }, [dispatch, errorFetching]);
+
   const handleCallback = ({ query, date }) => {
     dispatch({ type: SET_SEARCH_PARAMS, query, date });
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
-    <div>
+    <>
+      <Typography variant="h2" gutterBottom>
+        List of stolen bikes in Berlin
+      </Typography>
       <IncidentsFilter handleCallback={handleCallback} />
       <IncidentsList
         incidents={incidents}
@@ -43,7 +65,12 @@ const IncidentsListContainer = () => {
         total={total}
         isFetching={isFetching}
       />
-    </div>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          There was an error fetching data
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

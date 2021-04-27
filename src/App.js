@@ -1,6 +1,6 @@
 import "./App.css";
 import IncidentsListContainer from "./components/IncidentsList/IncidentsListContainer";
-import IncidentDetails from "./components/IncidentDetails/incidentDetails";
+import IncidentDetails from "./components/IncidentDetails/IncidentDetails";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";

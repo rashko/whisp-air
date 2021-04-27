@@ -41,9 +41,13 @@ const IncidentsFilter = ({ handleCallback }) => {
     >
       <TextField
         id="standard-basic"
-        label="Search"
+        label="Free text search"
+        placeholder="Example: evo 2020"
         value={query}
         onChange={handleChange}
+        InputLabelProps={{
+          shrink: true,
+        }}
       />
       <TextField
         id="date"

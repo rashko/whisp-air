@@ -3,7 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { useSelector, useDispatch } from "react-redux";
 import Button from "@material-ui/core/Button";
-import Map from "./map";
+import Map from "./Map";
 import { formatDate } from "../../utils";
 import { INCIDENT_FETCH_REQUESTED } from "../../store/types";
 
