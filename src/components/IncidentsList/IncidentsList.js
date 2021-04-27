@@ -5,8 +5,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Pagination from "@material-ui/lab/Pagination";
 import Typography from "@material-ui/core/Typography";
-import moment from "moment";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { useHistory } from "react-router-dom";
+import { formatDate } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,16 +17,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const IncidentsList = ({
-  incidents,
-  page,
-  setPage,
-  total,
-  selected,
-}) => {
+const IncidentsList = ({ incidents, page, setPage, total, isFetching }) => {
   const classes = useStyles();
   const history = useHistory();
-  
+
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -38,29 +33,36 @@ const IncidentsList = ({
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
-        Total incidents: {total}
-      </Typography>
-      <List dense className={classes.root}>
-        {incidents.map((incident) => {
-          const { id, title, updated_at } = incident;
-          return (
-            <ListItem key={id} selected={id === selected} button onClick={() => handleClick(id)}>
-              <ListItemText
-                id={id}
-                primary={`${title}`}
-                secondary={moment.unix(updated_at).format("DD/MM/yyyy hh:mm")}
+      {isFetching && <CircularProgress />}
+      {!isFetching && (
+        <>
+          <Typography variant="h6" gutterBottom>
+            Total incidents: {total}
+          </Typography>
+          <List dense className={classes.root}>
+            {incidents.map((incident) => {
+              const { id, title, occurred_at } = incident;
+              return (
+                <ListItem key={id} button onClick={() => handleClick(id)}>
+                  <ListItemText
+                    id={id}
+                    primary={`${title}`}
+                    secondary={formatDate(occurred_at)}
+                  />
+                </ListItem>
+              );
+            })}
+            {count > 0 && (
+              <Pagination
+                count={count}
+                page={page}
+                onChange={handleChange}
+                shape="rounded"
               />
-            </ListItem>
-          );
-        })}
-        <Pagination
-          count={count}
-          page={page}
-          onChange={handleChange}
-          shape="rounded"
-        />
-      </List>
+            )}
+          </List>
+        </>
+      )}
     </>
   );
 };

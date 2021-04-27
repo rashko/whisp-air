@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { useSelector, useDispatch } from "react-redux";
+import Button from "@material-ui/core/Button";
 import Map from "./map";
+import { formatDate } from "../../utils";
+import { INCIDENT_FETCH_REQUESTED } from "../../store/types";
 
 const IncidentDetails = () => {
   const { id } = useParams();
+  const history = useHistory();
   const dispatch = useDispatch();
   const incident = useSelector((state) => state.incidents.selectedIncident);
-  const geometry = useSelector((state) => state.incidents.geometry)
-
+  const geometry = useSelector((state) => state.incidents.geometry);
+  
   useEffect(() => {
-    dispatch({ type: "SET_SELECTED_INCIDENT", id: Number(id) });
+    dispatch({ type: INCIDENT_FETCH_REQUESTED, id });
   }, [id, dispatch]);
 
   if (!incident) {
@@ -25,11 +29,15 @@ const IncidentDetails = () => {
 
   return (
     <>
+      <Button onClick={() => history.push("/")} variant="contained">
+        Back
+      </Button>
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        occurred at: {occurred_at} | reported at: {updated_at}
+        occurred at: {formatDate(occurred_at)} | reported at:{" "}
+        {formatDate(updated_at)}
       </Typography>
       <Typography variant="body1" gutterBottom>
         {description}

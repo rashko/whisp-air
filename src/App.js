@@ -19,11 +19,9 @@ function App() {
       <Container>
         <div className={classes.root}>
           <Grid container spacing={3}>
-            <Grid item xs>
-              <IncidentsListContainer />
-            </Grid>
-            <Grid item xs={6}>
+            <Grid item>
               <Switch>
+                <Route exact path="/" children={<IncidentsListContainer />} />
                 <Route path="/incident/:id" children={<IncidentDetails />} />
               </Switch>
             </Grid>
