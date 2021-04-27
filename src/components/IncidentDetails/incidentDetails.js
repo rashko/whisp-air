@@ -9,6 +9,8 @@ import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
+import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { formatDate } from "../../utils";
 import Map from "./Map";
 
@@ -26,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
     color: theme.palette.text.secondary,
+  },
+  large: {
+    width: "100%",
+    height: "100%",
   },
 }));
 const IncidentDetails = () => {
@@ -62,10 +68,14 @@ const IncidentDetails = () => {
         </Toolbar>
       </AppBar>
       <Grid container spacing={3}>
-        <Grid item sm={4} xs={12} >
+        <Grid item sm={4} xs={12}>
           <Paper className={classes.paper}>
-            {image_url && (
+            {image_url ? (
               <img alt={title} src={image_url} style={{ maxWidth: "100%" }} />
+            ) : (
+              <Avatar alt={title} className={classes.large} variant="rounded">
+                <DirectionsBikeIcon style={{ fontSize: 150 }} />
+              </Avatar>
             )}
           </Paper>
         </Grid>
@@ -77,9 +87,11 @@ const IncidentDetails = () => {
             <Typography variant="subtitle1" display="block" gutterBottom>
               <strong>Reported at:</strong> {formatDate(updated_at)}
             </Typography>
-            <Typography variant="subtitle1" display="block" gutterBottom>
-              <strong>Description:</strong> {description}
-            </Typography>
+            {description && (
+              <Typography variant="subtitle1" display="block" gutterBottom>
+                <strong>Description:</strong> {description}
+              </Typography>
+            )}
           </Paper>
         </Grid>
         <Grid item sm={4} xs={12}>
