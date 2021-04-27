@@ -4,14 +4,27 @@ import {
   INCIDENTS_FETCH_REQUESTED,
   SET_SEARCH_PARAMS,
 } from "../../store/types";
+import Snackbar from "@material-ui/core/Snackbar";
+import Typography from "@material-ui/core/Typography";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import { makeStyles } from "@material-ui/core/styles";
 import IncidentsList from "./IncidentsList";
 import IncidentsFilter from "./IncidentsFilter";
-import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "../Alert/Alert";
 import { occurredDate } from "../../utils";
-import Typography from "@material-ui/core/Typography";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+
+  title: {
+    flexGrow: 1,
+  },
+}));
 const IncidentsListContainer = () => {
+  const classes = useStyles();
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -43,6 +56,7 @@ const IncidentsListContainer = () => {
 
   const handleCallback = ({ query, date }) => {
     dispatch({ type: SET_SEARCH_PARAMS, query, date });
+    setPage(1);
   };
 
   const handleClose = (event, reason) => {
@@ -54,9 +68,13 @@ const IncidentsListContainer = () => {
 
   return (
     <>
-      <Typography variant="h2" gutterBottom>
-        List of stolen bikes in Berlin
-      </Typography>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" className={classes.title}>
+            List of stolen bikes in Berlin
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <IncidentsFilter handleCallback={handleCallback} />
       <IncidentsList
         incidents={incidents}

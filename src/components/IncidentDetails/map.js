@@ -14,7 +14,6 @@ const MyMapComponent = withScriptjs(
         setShow(true);
       }, 2000);
     }, [lat, lng]);
-    console.log(lat, lng);
     return (
       <GoogleMap defaultZoom={18} center={{ lat, lng }}>
         {isMarkerShown && show && (

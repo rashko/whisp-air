@@ -1,27 +1,17 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import Pagination from "@material-ui/lab/Pagination";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Divider from "@material-ui/core/Divider";
-import Avatar from "@material-ui/core/Avatar";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-import { useHistory } from "react-router-dom";
-import { formatDate } from "../../utils";
+import IncidentListItem from "./IncidentListItem";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
   },
 }));
 
@@ -56,35 +46,15 @@ const IncidentsList = ({ incidents, page, setPage, total, isFetching }) => {
                 media: { image_url_thumb },
               } = incident;
               return (
-                <>
-                  <ListItem key={id} button onClick={() => handleClick(id)}>
-                    <ListItemText
-                      id={id}
-                      primary={`${title}`}
-                      secondary={formatDate(occurred_at)}
-                    />
-                    <ListItemAvatar>
-                      {image_url_thumb && (
-                        <Avatar
-                          alt={title}
-                          src={image_url_thumb}
-                          className={classes.large}
-                          variant="rounded"
-                        />
-                      )}
-                      {!image_url_thumb && (
-                        <Avatar
-                          alt={title}
-                          className={classes.large}
-                          variant="rounded"
-                        >
-                          <DirectionsBikeIcon style={{ fontSize: 50 }} />
-                        </Avatar>
-                      )}
-                    </ListItemAvatar>
-                  </ListItem>
-                  {index < 9 && <Divider variant="inset" component="li" />}
-                </>
+                <IncidentListItem
+                  key={id}
+                  id={id}
+                  title={title}
+                  occurred_at={occurred_at}
+                  image_url_thumb={image_url_thumb}
+                  index={index}
+                  handleClick={handleClick}
+                />
               );
             })}
             {count > 0 && (

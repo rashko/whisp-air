@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,11 +40,12 @@ const IncidentsFilter = ({ handleCallback }) => {
       onSubmit={handleSubmit}
     >
       <TextField
-        id="standard-basic"
+        id="free-text"
         label="Free text search"
         placeholder="Example: evo 2020"
         value={query}
         onChange={handleChange}
+        inputProps={{ 'aria-label': 'free-text' }}
         InputLabelProps={{
           shrink: true,
         }}
